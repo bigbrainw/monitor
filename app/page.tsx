@@ -44,7 +44,7 @@ const TOOL_ICONS: Record<string, string> = {
 function stageBadge(stage: string) {
   const s = stage.toLowerCase()
   const cls = STAGE_STYLE[s] || 'text-slate-600 bg-slate-800/30 border-slate-700/30'
-  return <span className={`text-[9px] rounded border px-1.5 py-px font-medium ${cls}`}>{stage}</span>
+  return <span className={`text-sm rounded border px-1.5 py-px font-medium ${cls}`}>{stage}</span>
 }
 
 // ─── Shared agent loader ──────────────────────────────────────────────────────
@@ -112,13 +112,13 @@ function AgentBlock({ agent, onClick }: { agent: Agent; onClick: () => void }) {
       <div className="flex items-start gap-2.5">
         <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${dot} ${isRunning ? 'animate-pulse' : 'opacity-25'}`} />
         <div className="flex-1 min-w-0">
-          <div className={`text-[13px] font-semibold truncate ${isRunning ? 'text-white' : 'text-slate-500'}`}>
+          <div className={`text-base font-semibold truncate ${isRunning ? 'text-white' : 'text-slate-500'}`}>
             {title}
           </div>
           <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-            <span className="text-[10px] text-slate-700 font-mono truncate max-w-[120px]">{subtitle}</span>
+            <span className="text-xs text-slate-700 font-mono truncate max-w-[120px]">{subtitle}</span>
             {agent.stage && <>{stageBadge(agent.stage)}</>}
-            {!isRunning && <span className="text-[9px] text-slate-800">idle</span>}
+            {!isRunning && <span className="text-sm text-slate-800">idle</span>}
           </div>
         </div>
         {isRunning && <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mt-1 shrink-0" />}
@@ -126,19 +126,19 @@ function AgentBlock({ agent, onClick }: { agent: Agent; onClick: () => void }) {
 
       {/* Current work */}
       {summary && (
-        <p className="text-[11px] text-slate-500 leading-snug line-clamp-2">{summary}</p>
+        <p className="text-sm text-slate-500 leading-snug line-clamp-2">{summary}</p>
       )}
 
       {/* Plan preview */}
       {agent.plan && (
-        <p className="text-[11px] text-slate-600 leading-snug line-clamp-2 border-t border-slate-800/50 pt-2">{
+        <p className="text-sm text-slate-600 leading-snug line-clamp-2 border-t border-slate-800/50 pt-2">{
           agent.plan.replace(/[#*`]/g, '').split('\n').find(l => l.trim()) ?? ''
         }</p>
       )}
 
       {/* Risks */}
       {agent.risks && (
-        <div className="flex items-center gap-1 text-[10px] text-amber-800">
+        <div className="flex items-center gap-1 text-xs text-amber-800">
           <span>⚠</span>
           <span className="truncate">{agent.risks.replace(/[#*`\-]/g, '').split('\n').find(l => l.trim()) ?? ''}</span>
         </div>
@@ -147,7 +147,7 @@ function AgentBlock({ agent, onClick }: { agent: Agent; onClick: () => void }) {
       {/* Task bar */}
       {(agent.tasks?.length ?? 0) > 0 && (
         <div className="space-y-1 border-t border-slate-800/50 pt-2">
-          <div className="flex justify-between text-[10px]">
+          <div className="flex justify-between text-xs">
             <span className="text-slate-700">{openTasks.length} open</span>
             <span className="text-slate-800">{pct}%</span>
           </div>
@@ -155,7 +155,7 @@ function AgentBlock({ agent, onClick }: { agent: Agent; onClick: () => void }) {
             <div className="h-full bg-violet-600/70 rounded-full" style={{ width: `${pct}%` }} />
           </div>
           {openTasks.slice(0, 2).map(t => (
-            <div key={t.id} className="flex items-center gap-1 text-[10px] text-slate-700">
+            <div key={t.id} className="flex items-center gap-1 text-xs text-slate-700">
               <span className={t.status === 'blocked' ? 'text-red-700' : ''}>
                 {t.status === 'blocked' ? '!' : '·'}
               </span>
@@ -209,11 +209,11 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-semibold text-white">{agentTitle(agent).title}</span>
             {agent.stage && stageBadge(agent.stage)}
-            <span className={`text-[10px] ${agent.status === 'running' ? 'text-emerald-400' : 'text-slate-600'}`}>
+            <span className={`text-xs ${agent.status === 'running' ? 'text-emerald-400' : 'text-slate-600'}`}>
               {agent.status}
             </span>
           </div>
-          {cwd && <div className="text-[10px] text-slate-700 font-mono mt-0.5 truncate">{cwd}</div>}
+          {cwd && <div className="text-xs text-slate-700 font-mono mt-0.5 truncate">{cwd}</div>}
         </div>
         <button onClick={onClose} className="text-slate-700 hover:text-slate-400 transition-colors text-lg leading-none mt-0.5">×</button>
       </div>
@@ -222,15 +222,15 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
       <div className="flex border-b border-slate-800/60 px-4 gap-4">
         {(['overview', 'memory', 'tasks'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
-            className={`text-[11px] py-2.5 capitalize transition-colors border-b-2 ${
+            className={`text-sm py-2.5 capitalize transition-colors border-b-2 ${
               tab === t ? 'text-white border-violet-500' : 'text-slate-600 border-transparent hover:text-slate-400'
             }`}>
             {t}
             {t === 'memory' && memories.length > 0 && (
-              <span className="ml-1 text-[9px] text-slate-700">{memories.length}</span>
+              <span className="ml-1 text-sm text-slate-700">{memories.length}</span>
             )}
             {t === 'tasks' && agent.tasks?.length > 0 && (
-              <span className="ml-1 text-[9px] text-slate-700">{openTasks.length}</span>
+              <span className="ml-1 text-sm text-slate-700">{openTasks.length}</span>
             )}
           </button>
         ))}
@@ -244,17 +244,17 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
             {/* Session */}
             {(sessionSummary || sessionGoal) && (
               <div className="space-y-2">
-                <div className="text-[9px] text-slate-700 uppercase tracking-widest">Current Session</div>
+                <div className="text-sm text-slate-700 uppercase tracking-widest">Current Session</div>
                 {sessionSummary && (
                   <div className="bg-slate-900/60 border border-slate-800/60 rounded-lg p-3">
-                    <div className="text-[9px] text-slate-700 mb-1">Now</div>
-                    <p className="text-[12px] text-slate-300 leading-relaxed">{sessionSummary}</p>
+                    <div className="text-sm text-slate-700 mb-1">Now</div>
+                    <p className="text-sm text-slate-300 leading-relaxed">{sessionSummary}</p>
                   </div>
                 )}
                 {sessionGoal && (
                   <div className="bg-slate-900/60 border border-slate-800/60 rounded-lg p-3">
-                    <div className="text-[9px] text-slate-700 mb-1">Original Goal</div>
-                    <p className="text-[12px] text-slate-400 leading-relaxed">{sessionGoal}</p>
+                    <div className="text-sm text-slate-700 mb-1">Original Goal</div>
+                    <p className="text-sm text-slate-400 leading-relaxed">{sessionGoal}</p>
                   </div>
                 )}
               </div>
@@ -263,14 +263,14 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
             {/* Plan */}
             {agent.plan && (
               <div className="space-y-1.5">
-                <div className="text-[9px] text-slate-700 uppercase tracking-widest">Plan</div>
-                <div className="text-[12px] text-slate-400 leading-relaxed">
+                <div className="text-sm text-slate-700 uppercase tracking-widest">Plan</div>
+                <div className="text-sm text-slate-400 leading-relaxed">
                   <ReactMarkdown components={{
                     p: ({ children }) => <p className="mb-2 last:mb-0 text-slate-400">{children}</p>,
                     strong: ({ children }) => <strong className="text-slate-200 font-semibold">{children}</strong>,
                     ul: ({ children }) => <ul className="space-y-1 mb-2">{children}</ul>,
                     li: ({ children }) => <li className="flex gap-2 text-slate-400"><span className="text-slate-700 shrink-0">·</span><span>{children}</span></li>,
-                    h1: ({ children }) => <p className="font-semibold text-slate-300 mb-1 text-[13px]">{children}</p>,
+                    h1: ({ children }) => <p className="font-semibold text-slate-300 mb-1 text-base">{children}</p>,
                     h2: ({ children }) => <p className="font-medium text-slate-400 mb-0.5">{children}</p>,
                   }}>{agent.plan}</ReactMarkdown>
                 </div>
@@ -280,8 +280,8 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
             {/* Risks */}
             {agent.risks && (
               <div className="space-y-1.5">
-                <div className="text-[9px] text-amber-800 uppercase tracking-widest">⚠ Risks</div>
-                <div className="border border-amber-900/30 bg-amber-950/10 rounded-lg p-3 text-[12px] text-amber-700/80 leading-relaxed">
+                <div className="text-sm text-amber-800 uppercase tracking-widest">⚠ Risks</div>
+                <div className="border border-amber-900/30 bg-amber-950/10 rounded-lg p-3 text-sm text-amber-700/80 leading-relaxed">
                   <ReactMarkdown components={{
                     p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
                     ul: ({ children }) => <ul className="space-y-1">{children}</ul>,
@@ -292,7 +292,7 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
             )}
 
             {!agent.plan && !agent.risks && !sessionSummary && (
-              <p className="text-[11px] text-slate-700 text-center pt-4">No plan yet. Ask the orchestrator to create one.</p>
+              <p className="text-sm text-slate-700 text-center pt-4">No plan yet. Ask the orchestrator to create one.</p>
             )}
           </>
         )}
@@ -306,17 +306,17 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
               </div>
             )}
             {!memLoading && memories.length === 0 && (
-              <p className="text-[11px] text-slate-700 text-center pt-4">No memories yet.</p>
+              <p className="text-sm text-slate-700 text-center pt-4">No memories yet.</p>
             )}
             {!memLoading && memories.map(m => (
               <div key={m.id} className={`rounded-lg border p-3 space-y-1 ${MEM_TYPE_COLOR[m.type] ?? 'border-slate-800 bg-slate-900/30'}`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] uppercase tracking-widest text-slate-700">{m.type}</span>
-                  {m.score != null && <span className="text-[9px] text-slate-800">{(m.score * 100).toFixed(0)}%</span>}
+                  <span className="text-sm uppercase tracking-widest text-slate-700">{m.type}</span>
+                  {m.score != null && <span className="text-sm text-slate-800">{(m.score * 100).toFixed(0)}%</span>}
                 </div>
-                <p className="text-[12px] text-slate-400 leading-relaxed">{m.text}</p>
+                <p className="text-sm text-slate-400 leading-relaxed">{m.text}</p>
                 {m.created_at && (
-                  <div className="text-[9px] text-slate-800">{new Date(m.created_at).toLocaleDateString()}</div>
+                  <div className="text-sm text-slate-800">{new Date(m.created_at).toLocaleDateString()}</div>
                 )}
               </div>
             ))}
@@ -327,17 +327,17 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
         {tab === 'tasks' && (
           <>
             {openTasks.length === 0 && doneTasks.length === 0 && (
-              <p className="text-[11px] text-slate-700 text-center pt-4">No tasks.</p>
+              <p className="text-sm text-slate-700 text-center pt-4">No tasks.</p>
             )}
             {openTasks.length > 0 && (
               <div className="space-y-1.5">
                 {openTasks.map(t => (
                   <div key={t.id} className="flex items-center gap-3 bg-slate-900/60 border border-slate-800/60 rounded-lg px-3 py-2.5">
-                    <span className={`text-[10px] shrink-0 ${TASK_STATUS_COLOR[t.status] ?? 'text-slate-600'}`}>
+                    <span className={`text-xs shrink-0 ${TASK_STATUS_COLOR[t.status] ?? 'text-slate-600'}`}>
                       {t.status === 'in-progress' ? '▶' : t.status === 'blocked' ? '!' : '○'}
                     </span>
-                    <span className="text-[12px] text-slate-300 flex-1">{t.title}</span>
-                    <span className={`text-[9px] shrink-0 ${t.priority === 'high' ? 'text-red-600' : t.priority === 'low' ? 'text-slate-700' : 'text-slate-700'}`}>
+                    <span className="text-sm text-slate-300 flex-1">{t.title}</span>
+                    <span className={`text-sm shrink-0 ${t.priority === 'high' ? 'text-red-600' : t.priority === 'low' ? 'text-slate-700' : 'text-slate-700'}`}>
                       {t.priority === 'high' ? '↑' : t.priority === 'low' ? '↓' : ''}
                     </span>
                   </div>
@@ -346,15 +346,15 @@ function AgentDetailPanel({ agent, onClose }: { agent: Agent; onClose: () => voi
             )}
             {doneTasks.length > 0 && (
               <details className="group mt-2">
-                <summary className="text-[10px] text-slate-700 hover:text-slate-500 cursor-pointer list-none flex items-center gap-1 select-none">
+                <summary className="text-xs text-slate-700 hover:text-slate-500 cursor-pointer list-none flex items-center gap-1 select-none">
                   <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
                   {doneTasks.length} completed
                 </summary>
                 <div className="mt-2 space-y-1">
                   {doneTasks.map(t => (
                     <div key={t.id} className="flex items-center gap-3 px-3 py-2">
-                      <span className="text-[10px] text-emerald-800">✓</span>
-                      <span className="text-[12px] text-slate-700 line-through flex-1">{t.title}</span>
+                      <span className="text-xs text-emerald-800">✓</span>
+                      <span className="text-sm text-slate-700 line-through flex-1">{t.title}</span>
                     </div>
                   ))}
                 </div>
@@ -387,8 +387,8 @@ function AgentsTab() {
         {running.length > 0 && (
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
-              <div className="text-[10px] text-slate-600 uppercase tracking-widest">Running</div>
-              <div className="text-[10px] text-slate-800">{running.length}</div>
+              <div className="text-xs text-slate-600 uppercase tracking-widest">Running</div>
+              <div className="text-xs text-slate-800">{running.length}</div>
               <div className="flex-1 h-px bg-slate-800/50" />
             </div>
             <div className="grid grid-cols-3 gap-3">
@@ -401,9 +401,9 @@ function AgentsTab() {
         {idle.length > 0 && (
           <details className="group" open={running.length === 0}>
             <summary className="flex items-center gap-2 mb-3 cursor-pointer list-none select-none">
-              <span className="text-[10px] text-slate-700 group-open:hidden">▶</span>
-              <span className="text-[10px] text-slate-700 hidden group-open:inline">▼</span>
-              <div className="text-[10px] text-slate-700 uppercase tracking-widest">Idle · {idle.length}</div>
+              <span className="text-xs text-slate-700 group-open:hidden">▶</span>
+              <span className="text-xs text-slate-700 hidden group-open:inline">▼</span>
+              <div className="text-xs text-slate-700 uppercase tracking-widest">Idle · {idle.length}</div>
               <div className="flex-1 h-px bg-slate-800/30" />
             </summary>
             <div className="grid grid-cols-3 gap-3">
@@ -446,19 +446,19 @@ function isAgentOverviewArray(data: unknown): data is AgentOverview[] {
 }
 
 function TaskProgressBar({ tasks }: { tasks: AgentOverview['tasks'] }) {
-  if (tasks.total === 0) return <span className="text-[10px] text-slate-800">no tasks</span>
+  if (tasks.total === 0) return <span className="text-xs text-slate-800">no tasks</span>
   const pct = Math.round((tasks.done / tasks.total) * 100)
   return (
     <div className="space-y-1">
       <div className="flex justify-between">
-        <span className="text-[10px] text-slate-600">{tasks.open} open · {tasks.done} done</span>
-        <span className="text-[10px] text-slate-700">{pct}%</span>
+        <span className="text-xs text-slate-600">{tasks.open} open · {tasks.done} done</span>
+        <span className="text-xs text-slate-700">{pct}%</span>
       </div>
       <div className="h-0.5 bg-slate-800 rounded-full overflow-hidden">
         <div className="h-full bg-violet-600 rounded-full" style={{ width: `${pct}%` }} />
       </div>
       {tasks.items.slice(0, 2).map((t, i) => (
-        <div key={i} className="flex items-center gap-1 text-[10px] text-slate-700">
+        <div key={i} className="flex items-center gap-1 text-xs text-slate-700">
           <span className={t.status === 'blocked' ? 'text-red-700' : ''}>
             {t.status === 'blocked' ? '!' : '·'}
           </span>
@@ -481,21 +481,21 @@ function AgentOverviewCard({ a }: { a: AgentOverview }) {
       <div className="flex items-start gap-2">
         <div className={`w-2 h-2 rounded-full mt-1 shrink-0 ${dot} ${isRunning ? 'animate-pulse' : 'opacity-30'}`} />
         <div className="flex-1 min-w-0">
-          <div className={`text-[13px] font-semibold truncate ${isRunning ? 'text-white' : 'text-slate-500'}`}>{a.name}</div>
+          <div className={`text-base font-semibold truncate ${isRunning ? 'text-white' : 'text-slate-500'}`}>{a.name}</div>
           <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-            {a.project && <span className="text-[10px] text-slate-700 bg-slate-800/60 rounded px-1.5 py-0.5">{a.project.name}</span>}
-            {a.stage && <span className={`text-[9px] rounded border px-1 py-px ${stageStyle || 'text-slate-700 border-slate-800'}`}>{a.stage}</span>}
+            {a.project && <span className="text-xs text-slate-700 bg-slate-800/60 rounded px-1.5 py-0.5">{a.project.name}</span>}
+            {a.stage && <span className={`text-sm rounded border px-1 py-px ${stageStyle || 'text-slate-700 border-slate-800'}`}>{a.stage}</span>}
           </div>
         </div>
       </div>
-      {summary && <p className="text-[11px] text-slate-500 line-clamp-2">{summary}</p>}
+      {summary && <p className="text-sm text-slate-500 line-clamp-2">{summary}</p>}
       {a.plan && (
-        <div className="border-t border-slate-800/60 pt-2 text-[11px] text-slate-600 line-clamp-2">
+        <div className="border-t border-slate-800/60 pt-2 text-sm text-slate-600 line-clamp-2">
           {a.plan.replace(/[#*`]/g, '').split('\n').find(l => l.trim()) ?? ''}
         </div>
       )}
       {a.risks && (
-        <div className="flex items-center gap-1 text-[10px] text-amber-800">
+        <div className="flex items-center gap-1 text-xs text-amber-800">
           <span>⚠</span><span className="truncate">{a.risks.replace(/[#*`\-]/g, '').split('\n').find(l => l.trim()) ?? ''}</span>
         </div>
       )}
@@ -514,7 +514,7 @@ function AgentOverviewGrid({ data }: { data: AgentOverview[] }) {
       {running.length > 0 && <div className="grid grid-cols-2 gap-2">{running.map(a => <AgentOverviewCard key={a.id} a={a} />)}</div>}
       {idle.length > 0 && (
         <details className="group">
-          <summary className="text-[10px] text-slate-700 hover:text-slate-500 cursor-pointer list-none flex items-center gap-1 select-none">
+          <summary className="text-xs text-slate-700 hover:text-slate-500 cursor-pointer list-none flex items-center gap-1 select-none">
             <span className="group-open:rotate-90 transition-transform inline-block">▶</span>
             {idle.length} idle
           </summary>
@@ -535,7 +535,7 @@ function ToolResult({ tc }: { tc: ToolCall }) {
     <div>
       <button
         onClick={() => done && !isOverview && setOpen(o => !o)}
-        className={`inline-flex items-center gap-1.5 text-[10px] rounded px-2 py-0.5 font-mono transition-all ${
+        className={`inline-flex items-center gap-1.5 text-xs rounded px-2 py-0.5 font-mono transition-all ${
           done
             ? isOverview ? 'text-violet-500 bg-violet-900/20 border border-violet-800/40 cursor-default'
               : 'text-slate-500 hover:text-slate-300 bg-slate-800/60 cursor-pointer'
@@ -548,7 +548,7 @@ function ToolResult({ tc }: { tc: ToolCall }) {
       </button>
       {isOverview && done && <div className="mt-3"><AgentOverviewGrid data={tc.result as AgentOverview[]} /></div>}
       {open && done && !isOverview && (
-        <pre className="mt-1 text-[10px] text-slate-500 bg-[#0d1117] border border-slate-800/80 rounded-lg p-3 max-h-52 overflow-auto whitespace-pre-wrap">
+        <pre className="mt-1 text-xs text-slate-500 bg-[#0d1117] border border-slate-800/80 rounded-lg p-3 max-h-52 overflow-auto whitespace-pre-wrap">
           {JSON.stringify(tc.result, null, 2)}
         </pre>
       )}
@@ -565,11 +565,11 @@ const MD: Record<string, React.ElementType> = {
   li: ({ children }) => <li className="text-slate-300 flex gap-1.5 before:content-['·'] before:text-slate-700 before:shrink-0 list-none"><span>{children}</span></li>,
   code: ({ children, className }: { children?: React.ReactNode; className?: string }) =>
     className
-      ? <code className="block bg-slate-900 border border-slate-800 rounded-lg p-3 text-[11px] font-mono text-slate-300 overflow-auto my-2">{children}</code>
-      : <code className="bg-slate-800 rounded px-1.5 py-0.5 text-[11px] font-mono text-slate-300">{children}</code>,
+      ? <code className="block bg-slate-900 border border-slate-800 rounded-lg p-3 text-sm font-mono text-slate-300 overflow-auto my-2">{children}</code>
+      : <code className="bg-slate-800 rounded px-1.5 py-0.5 text-sm font-mono text-slate-300">{children}</code>,
   h1: ({ children }) => <p className="font-semibold text-white text-sm mb-1">{children}</p>,
   h2: ({ children }) => <p className="font-semibold text-slate-200 mb-1">{children}</p>,
-  h3: ({ children }) => <p className="font-medium text-slate-300 mb-0.5 text-[13px]">{children}</p>,
+  h3: ({ children }) => <p className="font-medium text-slate-300 mb-0.5 text-base">{children}</p>,
   hr: () => <hr className="border-slate-800 my-3" />,
 }
 
@@ -579,7 +579,7 @@ function AssistantBubble({ msg, isLast, streaming }: { msg: ChatMessage; isLast:
   return (
     <div className="flex gap-3 items-start">
       <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center shrink-0 mt-0.5">
-        <span className="text-[9px] font-bold text-white">AI</span>
+        <span className="text-sm font-bold text-white">AI</span>
       </div>
       <div className="flex-1 min-w-0 space-y-3">
         {(msg.toolCalls?.length ?? 0) > 0 && (
@@ -591,7 +591,7 @@ function AssistantBubble({ msg, isLast, streaming }: { msg: ChatMessage; isLast:
           </div>
         )}
         {msg.content && (
-          <div className="text-[13px] leading-relaxed">
+          <div className="text-base leading-relaxed">
             <ReactMarkdown components={MD}>{msg.content}</ReactMarkdown>
             {busy && <span className="inline-block w-0.5 h-3.5 bg-slate-500 ml-0.5 animate-pulse align-middle rounded-full" />}
           </div>
@@ -629,14 +629,14 @@ function SideAgentCard({ agent, onMention, onKill }: { agent: Agent; onMention: 
         <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot} ${isRunning ? 'animate-pulse' : 'opacity-30'}`} />
         <span className={`text-xs font-medium truncate flex-1 ${isRunning ? 'text-white' : 'text-slate-600'}`}>{agent.name}</span>
         <button onClick={handleKill}
-          className={`shrink-0 text-[9px] rounded px-1.5 py-0.5 transition-all opacity-0 group-hover:opacity-100 ${
+          className={`shrink-0 text-sm rounded px-1.5 py-0.5 transition-all opacity-0 group-hover:opacity-100 ${
             confirmKill ? 'text-red-300 bg-red-900/60 border border-red-700/60 opacity-100' : 'text-slate-600 hover:text-red-400 bg-slate-800'
           }`}>
           {confirmKill ? 'sure?' : '✕'}
         </button>
       </div>
       {agent.stage && <div className="pl-3.5">{stageBadge(agent.stage)}</div>}
-      {summary && isRunning && !agent.stage && <p className="text-[11px] text-slate-600 leading-snug line-clamp-2 pl-3.5">{summary}</p>}
+      {summary && isRunning && !agent.stage && <p className="text-sm text-slate-600 leading-snug line-clamp-2 pl-3.5">{summary}</p>}
     </div>
   )
 }
@@ -717,16 +717,16 @@ function OrchestratorTab() {
       {/* Side agent list */}
       <div className="w-56 shrink-0 flex flex-col border-r border-slate-800/50">
         <div className="px-4 py-3 border-b border-slate-800/50 flex items-center justify-between shrink-0">
-          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Agents</span>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Agents</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] text-slate-700">{running.length}/{agents.length}</span>
+            <span className="text-xs text-slate-700">{running.length}/{agents.length}</span>
             {running.length > 0 && <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />}
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {running.map(a => <SideAgentCard key={a.id} agent={a} onMention={mention} onKill={killAgent} />)}
           {idle.length > 0 && <>
-            {running.length > 0 && <div className="text-[9px] text-slate-800 uppercase tracking-widest px-2 pt-3 pb-0.5">Idle · {idle.length}</div>}
+            {running.length > 0 && <div className="text-sm text-slate-800 uppercase tracking-widest px-2 pt-3 pb-0.5">Idle · {idle.length}</div>}
             {idle.map(a => <SideAgentCard key={a.id} agent={a} onMention={mention} onKill={killAgent} />)}
           </>}
         </div>
@@ -737,12 +737,12 @@ function OrchestratorTab() {
         <div className="px-5 py-3 border-b border-slate-800/50 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-600 to-indigo-700 flex items-center justify-center">
-              <span className="text-[9px] font-bold text-white">AI</span>
+              <span className="text-sm font-bold text-white">AI</span>
             </div>
-            <span className="text-[11px] font-semibold text-slate-300">Orchestrator</span>
-            <span className="text-[10px] text-slate-700">gpt-4o</span>
+            <span className="text-sm font-semibold text-slate-300">Orchestrator</span>
+            <span className="text-xs text-slate-700">gpt-4o</span>
           </div>
-          {messages.length > 0 && <button onClick={() => setMessages([])} className="text-[10px] text-slate-700 hover:text-slate-400 transition-colors">clear</button>}
+          {messages.length > 0 && <button onClick={() => setMessages([])} className="text-xs text-slate-700 hover:text-slate-400 transition-colors">clear</button>}
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
@@ -753,18 +753,18 @@ function OrchestratorTab() {
               </div>
               <div className="text-center">
                 <p className="text-sm text-slate-500">What can I help you with?</p>
-                <p className="text-[11px] text-slate-700 mt-0.5">Click an agent on the left to @ them</p>
+                <p className="text-sm text-slate-700 mt-0.5">Click an agent on the left to @ them</p>
               </div>
               <div className="flex flex-col gap-1.5 w-full max-w-xs">
                 {SUGGESTIONS.map(s => (
                   <button key={s} onClick={() => { setInput(s); setTimeout(() => textareaRef.current?.focus(), 0) }}
-                    className="text-left text-[11px] text-slate-600 hover:text-slate-300 bg-slate-900/60 hover:bg-slate-900 border border-slate-800/40 hover:border-slate-700 rounded-lg px-3.5 py-2 transition-all">{s}</button>
+                    className="text-left text-sm text-slate-600 hover:text-slate-300 bg-slate-900/60 hover:bg-slate-900 border border-slate-800/40 hover:border-slate-700 rounded-lg px-3.5 py-2 transition-all">{s}</button>
                 ))}
               </div>
 
               {/* Tool list */}
               <div className="w-full max-w-sm border-t border-slate-800/40 pt-4">
-                <div className="text-[9px] text-slate-800 uppercase tracking-widest mb-2">Available tools</div>
+                <div className="text-sm text-slate-800 uppercase tracking-widest mb-2">Available tools</div>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                   {[
                     ['⬡', 'list_agents',              'all agents + status'],
@@ -781,10 +781,10 @@ function OrchestratorTab() {
                     ['⟳', 'get_running_processes',    'live running pids'],
                   ].map(([icon, name, desc]) => (
                     <div key={name} className="flex items-start gap-1.5 py-0.5">
-                      <span className="text-[10px] text-slate-700 shrink-0 font-mono w-3">{icon}</span>
+                      <span className="text-xs text-slate-700 shrink-0 font-mono w-3">{icon}</span>
                       <div className="min-w-0">
-                        <div className="text-[10px] text-slate-700 font-mono truncate">{name}</div>
-                        <div className="text-[9px] text-slate-800 truncate">{desc}</div>
+                        <div className="text-xs text-slate-700 font-mono truncate">{name}</div>
+                        <div className="text-sm text-slate-800 truncate">{desc}</div>
                       </div>
                     </div>
                   ))}
@@ -795,7 +795,7 @@ function OrchestratorTab() {
           {messages.map((msg, i) => (
             <div key={i}>
               {msg.role === 'user'
-                ? <div className="flex justify-end"><div className="max-w-[75%] bg-slate-800 rounded-2xl rounded-tr-sm px-4 py-2.5 text-[13px] text-white leading-relaxed">{msg.content}</div></div>
+                ? <div className="flex justify-end"><div className="max-w-[75%] bg-slate-800 rounded-2xl rounded-tr-sm px-4 py-2.5 text-base text-white leading-relaxed">{msg.content}</div></div>
                 : <AssistantBubble msg={msg} isLast={i === messages.length - 1} streaming={streaming} />}
             </div>
           ))}
@@ -810,14 +810,14 @@ function OrchestratorTab() {
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
               placeholder={streaming ? 'Working…' : 'Ask about your agents… or click one to @ them'}
               rows={1} disabled={streaming}
-              className="flex-1 bg-transparent text-[13px] text-white placeholder-slate-700 resize-none outline-none max-h-32 disabled:opacity-30 leading-relaxed py-0.5"
+              className="flex-1 bg-transparent text-base text-white placeholder-slate-700 resize-none outline-none max-h-32 disabled:opacity-30 leading-relaxed py-0.5"
               style={{ fieldSizing: 'content' } as React.CSSProperties} />
             <button onClick={send} disabled={!input.trim() || streaming}
               className="shrink-0 w-7 h-7 flex items-center justify-center rounded-lg bg-violet-600 hover:bg-violet-500 disabled:opacity-20 disabled:cursor-not-allowed transition-colors mb-0.5">
-              <span className="text-[11px] text-white font-bold">↑</span>
+              <span className="text-sm text-white font-bold">↑</span>
             </button>
           </div>
-          <div className="text-[9px] text-slate-800 mt-1 px-1">Shift+Enter for newline</div>
+          <div className="text-sm text-slate-800 mt-1 px-1">Shift+Enter for newline</div>
         </div>
       </div>
     </div>
@@ -840,7 +840,7 @@ export default function Home() {
           { key: 'orchestrator', label: 'Orchestrator' },
         ] as const).map(({ key, label }) => (
           <button key={key} onClick={() => setTab(key)}
-            className={`px-3.5 py-2 text-[11px] font-medium rounded-t-lg border-b-2 transition-colors ${
+            className={`px-3.5 py-2 text-sm font-medium rounded-t-lg border-b-2 transition-colors ${
               tab === key
                 ? 'text-white border-violet-500 bg-slate-900/40'
                 : 'text-slate-600 border-transparent hover:text-slate-400'
