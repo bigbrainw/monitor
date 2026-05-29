@@ -761,6 +761,35 @@ function OrchestratorTab() {
                     className="text-left text-[11px] text-slate-600 hover:text-slate-300 bg-slate-900/60 hover:bg-slate-900 border border-slate-800/40 hover:border-slate-700 rounded-lg px-3.5 py-2 transition-all">{s}</button>
                 ))}
               </div>
+
+              {/* Tool list */}
+              <div className="w-full max-w-sm border-t border-slate-800/40 pt-4">
+                <div className="text-[9px] text-slate-800 uppercase tracking-widest mb-2">Available tools</div>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                  {[
+                    ['⬡', 'list_agents',              'all agents + status'],
+                    ['◫', 'get_project_overview',     'visual fleet overview'],
+                    ['◈', 'get_agent_context',         'memories + tasks for one agent'],
+                    ['◉', 'search_all_memory',         'search XTrace across all agents'],
+                    ['✦', 'update_agent_plan',         'set stage / plan / risks'],
+                    ['+', 'create_task',               'add task to agent'],
+                    ['✎', 'update_task',               'change task status'],
+                    ['▣', 'create_project',            'new project'],
+                    ['↗', 'assign_agent_to_project',   'link agent → project'],
+                    ['◎', 'update_agent_status',       'set agent status'],
+                    ['▤', 'list_projects',             'all projects + goals'],
+                    ['⟳', 'get_running_processes',    'live running pids'],
+                  ].map(([icon, name, desc]) => (
+                    <div key={name} className="flex items-start gap-1.5 py-0.5">
+                      <span className="text-[10px] text-slate-700 shrink-0 font-mono w-3">{icon}</span>
+                      <div className="min-w-0">
+                        <div className="text-[10px] text-slate-700 font-mono truncate">{name}</div>
+                        <div className="text-[9px] text-slate-800 truncate">{desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
           {messages.map((msg, i) => (
