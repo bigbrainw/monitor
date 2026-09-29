@@ -473,18 +473,28 @@ function AgentOverviewCard({ a }: { a: AgentOverview }) {
   const dot = TYPE_DOT[a.type] ?? TYPE_DOT.other
   const stageStyle = (a.stage && STAGE_STYLE[a.stage.toLowerCase()]) || ''
   const isRunning = a.status === 'running'
-  const summary = (a.notes ?? '').split('\n').find(l => l.trim().length > 3 && !l.startsWith('/') && !l.startsWith('Now:'))
-    ?? (a.notes ?? '').split('\n').find(l => l.startsWith('Now:'))?.replace(/^Now:\s*/, '')
+
+  // Reuse same title logic as AgentBlock
+  const lines = (a.notes ?? '').split('\n').map(l => l.trim()).filter(Boolean)
+  const cwd = lines.find(l => l.startsWith('/'))
+  const dirName = cwd ? cwd.split('/').filter(Boolean).pop() ?? '' : ''
+  const planTitle = a.plan ? a.plan.replace(/^#+\s*/, '').split('\n')[0]?.replace(/[*`]/g, '').trim() : ''
+  const title = (planTitle && planTitle.length < 40) ? planTitle : dirName || a.name
+  const subtitle = dirName && title !== dirName ? dirName : a.type
+
+  const summary = lines.find(l => !l.startsWith('/') && !l.startsWith('Now:') && !l.startsWith('Goal:'))
+    ?? lines.find(l => l.startsWith('Now:'))?.replace(/^Now:\s*/, '')
 
   return (
     <div className={`rounded-xl border p-3.5 space-y-2.5 ${isRunning ? 'bg-slate-900 border-slate-700/60' : 'bg-slate-900/40 border-slate-800/30'}`}>
       <div className="flex items-start gap-2">
         <div className={`w-2 h-2 rounded-full mt-1 shrink-0 ${dot} ${isRunning ? 'animate-pulse' : 'opacity-30'}`} />
         <div className="flex-1 min-w-0">
-          <div className={`text-base font-semibold truncate ${isRunning ? 'text-white' : 'text-slate-500'}`}>{a.name}</div>
+          <div className={`text-base font-semibold truncate ${isRunning ? 'text-white' : 'text-slate-500'}`}>{title}</div>
           <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+            <span className="text-xs text-slate-700 font-mono truncate max-w-[120px]">{subtitle}</span>
             {a.project && <span className="text-xs text-slate-700 bg-slate-800/60 rounded px-1.5 py-0.5">{a.project.name}</span>}
-            {a.stage && <span className={`text-sm rounded border px-1 py-px ${stageStyle || 'text-slate-700 border-slate-800'}`}>{a.stage}</span>}
+            {a.stage && <span className={`text-xs rounded border px-1 py-px ${stageStyle || 'text-slate-700 border-slate-800'}`}>{a.stage}</span>}
           </div>
         </div>
       </div>
